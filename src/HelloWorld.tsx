@@ -1,82 +1,172 @@
+
+import React from "react";
 import {
   AbsoluteFill,
-  Easing,
-  Interactive,
-  interpolate,
   useCurrentFrame,
-  useVideoConfig,
+  interpolate,
 } from "remotion";
-import { Logo } from "./HelloWorld/Logo";
-import { Title } from "./HelloWorld/Title";
 
-export type HelloWorldProps = {
-  readonly titleText: string;
-  readonly titleColor: string;
-};
-
-export const HelloWorld: React.FC<HelloWorldProps> = ({
-  titleText,
-  titleColor,
-}) => {
+export const HelloWorld: React.FC = () => {
   const frame = useCurrentFrame();
-  const { durationInFrames, fps } = useVideoConfig();
+
+  const x = interpolate(frame, [0, 120], [-150, 2100], {
+    extrapolateRight: "clamp",
+  });
+
+  const titleOpacity = interpolate(
+    frame,
+    [10, 30, 110, 140],
+    [0, 1, 1, 0],
+    { extrapolateRight: "clamp" }
+  );
 
   return (
-    <AbsoluteFill style={{ backgroundColor: "white" }}>
-      <Interactive.Div
-        name="Content fade"
-        premountFor={fps}
+    <AbsoluteFill
+      style={{
+        backgroundColor: "#10182b",
+        overflow: "hidden",
+        imageRendering: "pixelated",
+        fontFamily: "monospace",
+      }}
+    >
+      <div
         style={{
           position: "absolute",
-          inset: 0,
-          opacity: interpolate(
-            frame,
-            [durationInFrames - 25, durationInFrames - 15],
-            [1, 0],
-            { extrapolateLeft: "clamp", extrapolateRight: "clamp" },
-          ),
+          width: 180,
+          height: 180,
+          borderRadius: "50%",
+          background: "#ffca75",
+          top: 120,
+          right: 250,
+          boxShadow: "0 0 70px #ff9b6240",
         }}
-      >
-        <Logo
-          name="Remotion logo"
-          premountFor={fps}
-          logoColor1="#91EAE4"
-          logoColor2="#86A8E7"
+      />
+
+      <div
+        style={{
+          position: "absolute",
+          bottom: 220,
+          left: 0,
+          width: "100%",
+          height: 400,
+          background: "#263b5b",
+          clipPath:
+            "polygon(0 55%, 15% 10%, 30% 65%, 45% 20%, 65% 70%, 80% 25%, 100% 60%, 100% 100%, 0 100%)",
+        }}
+      />
+
+      <div
+        style={{
+          position: "absolute",
+          bottom: 0,
+          width: "100%",
+          height: 260,
+          background: "#18283c",
+        }}
+      />
+
+      {Array.from({ length: 12 }, (_, i) => (
+        <div
+          key={i}
           style={{
-            translate: interpolate(frame, [25, 55], ["0px 0px", "0px -150px"], {
-              easing: Easing.spring({ damping: 100 }),
-              extrapolateLeft: "clamp",
-              extrapolateRight: "clamp",
-            }),
-          }}
-        />
-        <Title
-          name="Welcome title"
-          from={35}
-          premountFor={fps}
-          titleText={titleText}
-          titleColor={titleColor}
-        />
-        <Interactive.Div
-          name="Editing hint"
-          from={75}
-          premountFor={fps}
-          style={{
-            fontFamily: "SF Pro Text, Helvetica, Arial, sans-serif",
-            fontSize: 40,
-            textAlign: "center",
             position: "absolute",
-            bottom: 140,
-            width: "100%",
-            opacity: interpolate(frame, [75, 105], [0, 1], {
-              extrapolateLeft: "clamp",
-              extrapolateRight: "clamp",
-            }),
+            bottom: 100,
+            left: i * 175,
+            width: 105,
+            height: 100 + ((i * 47) % 100),
+            background: "#101b2d",
+            borderTop: "5px solid #40516a",
           }}
         >
-          Edit <code style={{ color: "#86A8E7" }}>src/Root.tsx</code> and save to reload.
-        </Interactive.Div>
-      </Interactive.Div>
+          {Array.from({ length: 6 }, (_, j) => (
+            <div
+              key={j}
+              style={{
+                position: "absolute",
+                left: 15 + (j % 3) * 27,
+                top: 15 + Math.floor(j / 3) * 30,
+                width: 10,
+                height: 12,
+                background: "#ffd78a",
+              }}
+            />
+          ))}
+        </div>
+      ))}
+
+      <div
+        style={{
+          position: "absolute",
+          left: x,
+          bottom: 100,
+          width: 40,
+          height: 80,
+          background: "#70d6ff",
+          boxShadow: "0 -25px 0 -5px #f3c7a5",
+        }}
+      >
+        <div
+          style={{
+            position: "absolute",
+            top: -18,
+            left: 15,
+            width: 8,
+            height: 8,
+            background: "#18283c",
+          }}
+        />
+        <div
+          style={{
+            position: "absolute",
+            bottom: -18,
+            left: 3,
+            width: 12,
+            height: 18,
+            background: "#e6edf7",
+          }}
+        />
+        <div
+          style={{
+            position: "absolute",
+            bottom: -18,
+            right: 3,
+            width: 12,
+            height: 18,
+            background: "#e6edf7",
+          }}
+        />
+      </div>
+
+      <div
+        style={{
+          position: "absolute",
+          top: 360,
+          width: "100%",
+          textAlign: "center",
+          color: "#ffffff",
+          fontSize: 76,
+          fontWeight: 900,
+          letterSpacing: 8,
+          opacity: titleOpacity,
+          textShadow: "6px 6px 0 #40516a",
+        }}
+      >
+        A NEW WORLD
+      </div>
+
+      <div
+        style={{
+          position: "absolute",
+          bottom: 45,
+          width: "100%",
+          textAlign: "center",
+          color: "#a8c4e8",
+          fontSize: 22,
+          letterSpacing: 5,
+        }}
+      >
+        PIXEL STORIES
+      </div>
     </AbsoluteFill>
   );
 };
