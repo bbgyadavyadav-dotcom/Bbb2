@@ -1,7 +1,7 @@
 
 name: Render Remotion Video
 
-on:
+'on':
   workflow_dispatch:
 
 permissions:
